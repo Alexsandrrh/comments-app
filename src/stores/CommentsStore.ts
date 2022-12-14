@@ -10,7 +10,12 @@ export class CommentsStore {
   /**
    * @description Флаг загрузки.
    * */
-  loading: boolean = false;
+  isLoading: boolean = false;
+
+  /**
+   * @description Флаг на сделанный запрос.
+   * */
+  isFetched: boolean = false;
 
   /**
    * @description Список комментариев.
@@ -19,7 +24,8 @@ export class CommentsStore {
 
   constructor() {
     makeObservable(this, {
-      loading: observable,
+      isLoading: observable,
+      isFetched: observable,
       list: observable,
 
       loadCommentsData: action('CommentsStore.loadCommentsData'),
@@ -31,7 +37,8 @@ export class CommentsStore {
    * */
   loadCommentsData = async () => {
     runInAction(() => {
-      this.loading = true;
+      this.isLoading = true;
+      this.isFetched = false;
     });
 
     try {
@@ -44,7 +51,8 @@ export class CommentsStore {
       });
     } finally {
       runInAction(() => {
-        this.loading = false;
+        this.isLoading = false;
+        this.isFetched = true;
       });
     }
   };

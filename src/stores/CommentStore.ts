@@ -123,7 +123,7 @@ export class CommentStore implements CommentSchema {
         runInAction(() => {
           this.loading = false;
         });
-      }, 1000);
+      }, 400);
     }
   };
 

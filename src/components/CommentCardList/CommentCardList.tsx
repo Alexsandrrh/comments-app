@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useMemo } from 'react';
 import type { FC } from 'react';
 
+import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 
 import { CommentCard } from 'components/CommentCard';
@@ -10,7 +11,7 @@ import { useComments } from 'hooks';
  * @description Список карточек комментариев.
  * */
 export const CommentCardList: FC = observer(() => {
-  const { loading, list, loadCommentsData } = useComments();
+  const { isLoading, isFetched, list, loadCommentsData } = useComments();
 
   const style = useMemo<CSSProperties>(
     () => ({
@@ -20,6 +21,24 @@ export const CommentCardList: FC = observer(() => {
     }),
     [],
   );
+
+  const content = computed(() => {
+    if (isLoading) return <h3>Загрузка данных...</h3>;
+
+    if (isFetched && !list.length)
+      return (
+        <>
+          <h3>Нет комментариев!</h3>
+          <button type="button" onClick={loadCommentsData}>
+            Загрузить данные
+          </button>
+        </>
+      );
+
+    return list.map((comment) => (
+      <CommentCard key={comment.id} comment={comment} />
+    ));
+  }).get();
 
   useEffect(
     () => {
@@ -31,25 +50,7 @@ export const CommentCardList: FC = observer(() => {
     [],
   );
 
-  if (loading) return null;
-
-  if (!list.length)
-    return (
-      <div style={style}>
-        <h3>Нет комментариев!</h3>
-        <button type="button" onClick={loadCommentsData}>
-          Загрузить данные
-        </button>
-      </div>
-    );
-
-  return (
-    <div style={style}>
-      {list.map((comment) => (
-        <CommentCard key={comment.id} comment={comment} />
-      ))}
-    </div>
-  );
+  return <div style={style}>{content}</div>;
 });
 
 CommentCardList.displayName = 'CommentCardList';

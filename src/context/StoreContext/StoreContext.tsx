@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
-import { RootStore, rootStore } from 'stores';
+import { RootStore, store } from 'stores';
 
 /**
  * @description Контекст хранилища.
  */
-export const StoreContext = createContext<RootStore>(rootStore);
+export const StoreContext = createContext<RootStore>(store);
 StoreContext.displayName = 'StoreContext';

@@ -1,6 +1,6 @@
 import { RootStore } from './RootStore';
 
-export const rootStore = new RootStore();
+export const store = new RootStore();
 
 export * from './CommentsStore';
 export * from './CommentStore';
